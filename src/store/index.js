@@ -9,8 +9,8 @@ export default new Vuex.Store({
     },
 
     getters: { // 类似 computed 属性
-        productsCount() {
-            //
+        availableProducts(state, getters) {
+            return state.products.filter(product => product.inventory > 0);
         }
     },
 
