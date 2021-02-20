@@ -12,8 +12,8 @@ export default new Vuex.Store({
     },
 
     getters: { // 类似 computed 属性
-        availableProducts(state) {
-            return state.products.filter(product => product.inventory > 0)
+        availableProducts(state, getters) {
+            return state.products //.filter(product => getters.productIsInStock(product))
         },
 
         cartProducts(state) {
@@ -30,6 +30,12 @@ export default new Vuex.Store({
         cartTotal(state, getters) {
             return getters.cartProducts.reduce((total, product) => total + product.quantity * product.price, 0)
         },
+
+        productIsInStock() {
+            return (product) => {
+                return product.inventory > 0
+            }
+        }
     },
 
     actions: { // 类似 methods，在组件中使用this.$store.dispatch('名称')调用
@@ -42,17 +48,17 @@ export default new Vuex.Store({
             })
         },
 
-        addProductToCart(context, product) {
-            if (product.inventory > 0) {
-                const cartItem = context.state.cart.find(item => item.id === product.id)
+        addProductToCart({getters, commit, state}, product) {
+            if (getters.productIsInStock(product)) {
+                const cartItem = state.cart.find(item => item.id === product.id)
 
                 if (!cartItem) {
-                    context.commit('pushProductToCart', product.id)
+                    commit('pushProductToCart', product.id)
                 } else {
-                    context.commit('incrementItemQuantity', cartItem)
+                    commit('incrementItemQuantity', cartItem)
                 }
 
-                context.commit('decrementProductInventory', product)
+                commit('decrementProductInventory', product)
             }
         },
 
