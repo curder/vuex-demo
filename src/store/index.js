@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
-import shop from "../api/shop"
+import actions from "./actions";
 
 Vue.use(Vuex)
 
@@ -38,43 +38,7 @@ export default new Vuex.Store({
         }
     },
 
-    actions: { // 类似 methods，在组件中使用this.$store.dispatch('名称')调用
-        fetchProduct({commit}) {
-            return new Promise((resolve) => {
-                shop.getProducts(products => {
-                    commit('setProduct', products)
-                    resolve()
-                })
-            })
-        },
-
-        addProductToCart({getters, commit, state}, product) {
-            if (getters.productIsInStock(product)) {
-                const cartItem = state.cart.find(item => item.id === product.id)
-
-                if (!cartItem) {
-                    commit('pushProductToCart', product.id)
-                } else {
-                    commit('incrementItemQuantity', cartItem)
-                }
-
-                commit('decrementProductInventory', product)
-            }
-        },
-
-        checkout({state, commit}) {
-            shop.buyProducts(
-                state.cart,
-                () => {
-                    commit('emptyCart')
-                    commit('setCheckoutStatus', 'success')
-                },
-                () => {
-                    commit('setCheckoutStatus', 'fail')
-                }
-            )
-        }
-    },
+    actions,
 
     mutations: { // 类似 事件，使用 state.commit(名称) 调用
         setProduct(state, products) {
