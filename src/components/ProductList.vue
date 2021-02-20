@@ -8,12 +8,10 @@
   </div>
 </template>
 <script>
-import store from "../store";
-
 export default {
   computed: {
     products() {
-      return store.state.products;
+      return this.$store.state.products;
     }
   },
 
@@ -25,7 +23,7 @@ export default {
 
   created() {
     this.loading = true;
-    store.dispatch('fetchProduct').then(() => this.loading = false);
+    this.$store.dispatch('fetchProduct').then(() => this.loading = false);
   },
 }
 </script>
