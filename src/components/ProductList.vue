@@ -12,16 +12,18 @@
   </div>
 </template>
 <script>
-export default {
-  computed: {
-    products() {
-      return this.$store.getters.availableProducts
-    },
-    productIsInStock() {
-      return this.$store.getters.productIsInStock
-    }
-  },
+import {mapActions, mapGetters, mapState} from 'vuex'
 
+export default {
+
+  computed: {
+    ...mapState({
+      products: state => state.products,
+    }),
+    ...mapGetters({
+      productIsInStock: 'productIsInStock',
+    })
+  },
   data() {
     return {
       loading: false,
@@ -30,13 +32,14 @@ export default {
 
   created() {
     this.loading = true
-    this.$store.dispatch('fetchProduct').then(() => this.loading = false)
+    this.fetchProduct().then(() => this.loading = false)
   },
 
   methods: {
-    addProductToCart(product) {
-      this.$store.dispatch('addProductToCart', product)
-    }
+    ...mapActions({
+      fetchProduct: 'fetchProduct',
+      addProductToCart: 'addProductToCart',
+    }),
   },
 }
 </script>
