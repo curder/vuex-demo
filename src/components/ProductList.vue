@@ -2,8 +2,8 @@
   <div>
     <h1>Product List</h1>
     <ul v-if="!loading">
-      <li v-for="product in products" v-if="product.inventory" :key="product.id">
-        {{ product.title }} - {{ product.price }} - {{ product.inventory }}
+      <li v-for="product in products" :key="product.id">
+        {{ product.title }} - {{ product.price | currency }} - {{ product.inventory }}
 
         <button @click="addProductToCart(product)">Add Cart</button>
       </li>
@@ -15,7 +15,7 @@
 export default {
   computed: {
     products() {
-      return this.$store.state.products
+      return this.$store.getters.availableProducts
     }
   },
 

@@ -13,7 +13,22 @@ export default new Vuex.Store({
     getters: { // 类似 computed 属性
         availableProducts(state) {
             return state.products.filter(product => product.inventory > 0)
-        }
+        },
+
+        cartProducts(state) {
+            return state.cart.map(cartItem => {
+                const product = state.products.find(item => item.id === cartItem.id)
+                return {
+                    title: product.title,
+                    price: product.price,
+                    quantity: cartItem.quantity,
+                }
+            })
+        },
+
+        cartTotal(state, getters) {
+            return getters.cartProducts.reduce((total, product) => total + product.quantity * product.price, 0)
+        },
     },
 
     actions: { // 类似 methods，在组件中使用this.$store.dispatch('名称')调用

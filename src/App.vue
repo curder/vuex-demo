@@ -1,15 +1,18 @@
 <template>
   <div id="app">
     <product-list></product-list>
+    <shopping-cart></shopping-cart>
   </div>
 </template>
 
 <script>
 import ProductList from "./components/ProductList";
+import ShoppingCart from "./components/ShoppingCart";
 
 export default {
   components: {
     ProductList,
+    ShoppingCart,
   }
 }
 </script>
