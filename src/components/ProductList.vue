@@ -2,7 +2,7 @@
   <div>
     <h1>Product List</h1>
     <ul v-if="!loading">
-      <li v-for="product in products" :key="product.id">
+      <li v-for="product in products" v-if="product.inventory" :key="product.id">
         {{ product.title }} - {{ product.price }} - {{ product.inventory }}
 
         <button @click="addProductToCart(product)">Add Cart</button>
