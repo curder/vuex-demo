@@ -1,13 +1,13 @@
 <template>
   <div>
     <h1>Product List</h1>
-    <ul>
+    <ul v-if="!loading">
       <li v-for="product in products" :key="product.id" v-text="`${product.title} - ${product.price}`"></li>
     </ul>
+    <p v-else>Loading...</p>
   </div>
 </template>
 <script>
-import shop from "../api/shop";
 import store from "../store";
 
 export default {
@@ -17,10 +17,15 @@ export default {
     }
   },
 
+  data() {
+    return {
+      loading: false,
+    };
+  },
+
   created() {
-    shop.getProducts(products => {
-      store.commit('setProduct', products);
-    })
+    this.loading = true;
+    store.dispatch('fetchProduct').then(() => this.loading = false);
   },
 }
 </script>
