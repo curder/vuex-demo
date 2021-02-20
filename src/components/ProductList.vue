@@ -20,7 +20,7 @@ export default {
     ...mapState({
       products: state => state.products.items,
     }),
-    ...mapGetters({
+    ...mapGetters('products', {
       productIsInStock: 'productIsInStock',
     })
   },
@@ -36,10 +36,12 @@ export default {
   },
 
   methods: {
-    ...mapActions({
+    ...mapActions('products', {
       fetchProduct: 'fetchProduct',
-      addProductToCart: 'addProductToCart',
     }),
+    ...mapActions('cart', {
+      addProductToCart: 'addProductToCart',
+    })
   },
 }
 </script>

@@ -1,6 +1,8 @@
 import shop from "../../api/shop";
 
 export default {
+    namespaced: true,
+
     state: { // 类似 data
         items: [],
         checkoutStatus: null,
@@ -46,8 +48,8 @@ export default {
     },
 
     actions: { // 类似于方法，在组件中使用 this.$state.dispatch 调用或使用mapActions导入方法
-        addProductToCart({getters, commit, state, rootState}, product) {
-            if (getters.productIsInStock(product)) {
+        addProductToCart({getters, commit, state, rootState, rootGetters}, product) {
+            if (rootGetters['products/productIsInStock'](product)) {
                 const cartItem = state.items.find(item => item.id === product.id)
 
                 if (!cartItem) {
@@ -56,7 +58,7 @@ export default {
                     commit('incrementItemQuantity', cartItem)
                 }
 
-                commit('decrementProductInventory', product)
+                commit('products/decrementProductInventory', product, {root: true})
             }
         },
 
